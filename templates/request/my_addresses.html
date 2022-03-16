@@ -1,0 +1,43 @@
+<title>My addresses | Deliverat</title>
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="container my-2 self-align-center" style="width: 85%">
+
+    <div class="row my-2 mx-5 justify-content-center" 
+    style="border:solid; border-width: 1pt; border-radius: 10px; display:block">
+
+        {% block list%}
+        {% if addresses %}
+        {% for address in addresses %}
+        <div class="row my-3 mx-3 align-items-center justify-content-center"
+            style="background-color: #d1d8e0; border: solid; border-width: 0px; border-radius: 10px">
+
+            <div class="col-10 my-1 align-self-center">
+                <a href="{% url 'request:edit_address' address.id %}">
+                <p style="overflow-wrap: break-word; font-size: 25px;">
+                    {{ address.gov }} - {{ address.dis }} - {{ address.street }}
+                </p></a>
+                {% if address.mark %}
+                <p>Mark: {{ address.mark }}</p>
+                {% endif %}
+            </div>
+            <div class="col-2 align-items-end">
+                <a class="btn btn-danger" href="{% url 'request:delete_address' address.id%}" style="color:white">Delete</a>
+            </div>
+            
+        </div>
+        {% endfor %}
+        {% else %}
+        <h3 class="mx-5 my-5">You haven't added any addresses yet!</h3>
+        {% endif %}
+        {% endblock %}
+
+    </div>
+    {% block button %}
+    <a class="btn btn-primary mx-5 my-4" href="{% url 'request:add_address' %}">Add Address</a>
+    {% endblock %}
+
+</div>
+{% endblock %}

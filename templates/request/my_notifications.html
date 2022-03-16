@@ -1,0 +1,46 @@
+{% extends 'request/my_addresses.html' %}
+
+{% block title %}
+<title>My Notifications</title>
+{% endblock %}
+
+{% block list %}
+
+{% if nots %}
+
+{% for not in nots %}
+<div class="row my-3 mx-3 align-items-center justify-content-center"
+    style="background-color: #d1d8e0; border: solid; border-width: 0px; border-radius: 10px">
+    
+    <div class="col-2 align-items-center">
+        <div class="row justify-content-center">
+            <a class="" href="{% url 'items:detail' not.order.item.id %}">
+                <img src="/media/{{ not.order.item.img }}" 
+                alt="{{ not.order.item.des }}" width="150px;" height="150px;" 
+                style="border-radius: 13%; margin-bottom:5px;
+                margin-top: 10px;">
+            </a>
+        </div>
+    </div>
+
+    <div class="col-10 my-1 align-self-center">
+        <p style="overflow-wrap: break-word; font-size: 25px;">
+            {{ not.buyer.username }} ordered: <a href="{% url 'items:detail' not.order.item.id %}">{{ not.order.item.name }}</a>
+        </p>
+        <p>Quantity: {{ not.order.quantity }}</p>
+        <p>At: {{ not.address.gov }} - {{ not.address.dis }} - {{ not.address.street }}</p>
+        <p>Mark: {{ not.address.mark }}</p>
+        <p>Total: {{ not.order.tot_price|floatformat }}L.E.</p>
+    </div>
+
+</div>
+{% endfor %}
+
+{% else %}
+<h3 class="mx-5 my-5">Nobody ordered from your store yet!</h3>
+{% endif %}
+
+{% block button %}
+{% endblock %}
+
+{% endblock %}

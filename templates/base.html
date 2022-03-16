@@ -1,0 +1,126 @@
+{% block title%}
+<title>Welcome to Deliverat</title>
+{% endblock %}
+
+{% load static %}
+<head>
+    <link rel="icon" href="/media/items/Lemon.png">
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+
+{% load bootstrap5 %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
+        aria-controls="navbarText" aria-expanded="False" aria-label="Toggle navigation">
+        <span class="nvabar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarText">
+        <ul class="navbar-nav mr-auto">
+            {% block nav %}
+            {% if user.is_authenticated %}
+
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:logout' %}">Logout</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'request:my_addresses' %}">My Addresses</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'request:my_orders' %}">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-cart-fill" viewBox="0 0 16 16">
+                        <path
+                            d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                    </svg>
+                    Cart</a>
+            </li>
+
+            <!--Checking user is of Merchant group
+            bdefore showin 'Add Item' label-->
+            {% load user_tags %}
+            {% if request.user|is_merchant %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'items:add_item' %}">Add Item</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'request:my_nots' %}">My Notifications</a>
+            </li>
+            {% endif %}
+
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:register' %}">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'main:login' %}">Login</a>
+            </li>
+            {% endif %}
+            {% endblock %}
+        </ul>
+    </div>
+</nav>
+
+{% block content %}
+{% if success %}
+<div class="alert alert-success">
+    <p><strong>Operation Successful!</strong> Your orders are now being processed and shipped.</p>
+</div>
+{% endif %}
+<div class="container px-3 py-3">
+    <div class="row align-items-center" style="align-items: center">
+        <div class="col align-self-center" style="text-align:center;">
+            {% if home %}
+            <h1>Welcome to Deliverat!</h1>
+            {% elif merchant %}
+            <h1>Merchant {{ merchant.username.capitalize }}</h1>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row row-cols-4 py-3">
+        {% for item in items %}
+        {% if item.stock %}
+        <div class="col-3" style="background-color:#F3F3F3; border-radius: 13%;
+            border: solid; border-width: 1pt;">
+
+            <div class="row justify-content-center">
+                <a href="{% url 'items:detail' item.id %}">
+                    <img src="/media/{{ item.img }}" alt="{{item.des}}" width="230px" height="230px" style="border-radius: 13%; margin-bottom:5px;
+                    margin-top: 10px;">
+                </a>
+            </div>
+            <div class="row justify-content-center" style="text-align:center">
+                <a href="{% url 'items:detail' item.id %}">
+                    <h5>{{ item.name }}</h5>
+                </a>
+            </div>
+            <div class="row justify-content-center">
+                <h5>Price: {{ item.price }} L.E.</h5>
+            </div>
+            <div class="row justify-content-center">
+                <p>{{ item.des }}</p>
+            </div>
+
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

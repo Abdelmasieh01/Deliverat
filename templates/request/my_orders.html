@@ -1,0 +1,57 @@
+<title>My orders | Deliverat</title>
+{% extends "request/my_addresses.html" %}
+
+{% block list %}
+{% if not_valid %}
+    <div class="alert alert-danger"></div>
+{% endif %}
+{% if orders %}
+{% for order in orders %}
+<div class="row my-3 mx-3 align-items-center justify-content-center"
+    style="background-color: #d1d8e0; border: solid; border-width: 0px; border-radius: 10px">
+
+    <div class="col-2 align-items-center">
+        <div class="row justify-content-center">
+            <a class="" href="{% url 'items:detail' order.item.id %}">
+                <img src="/media/{{ order.item.img }}" 
+                alt="{{ order.item.des }}" width="150px;" height="150px;" 
+                style="border-radius: 13%; margin-bottom:5px;
+                margin-top: 10px;">
+            </a>
+        </div>
+    </div>
+    <div class="col-8 my-1 align-self-center">
+        <a class="" href="{% url 'items:detail' order.item.id %}">
+            <p style="overflow-wrap: break-word; font-size: 25px;">
+                {{ order.item.name }}
+            </p>
+        </a>
+        <p style="overflow-wrap: break-work;">Describtion: {{ order.item.des }}</p>
+        <p>Quantity: {{ order.quantity }}</p>
+        <p>Merchant: <a href="{% url 'items:profile' order.item.user.id %}">{{ order.item.user.username.capitalize }}</p></a>
+        <p style="font-size: 22px;"><strong>Total Price: {{ order.tot_price|floatformat }} L.E.</strong></p>
+
+    </div>
+    <div class="col-2 align-self-end">
+        <div class="row align-self-end my-3">
+            <a class="btn btn-danger" href="{% url 'request:delete_order' order.id %}" style="color:white">Remove</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
+<h3 class="mx-5">Total: {{ total|floatformat }} L.E.</h3>
+{% else %}
+<h3 class="mx-5 my-5">You don't have any orders in your cart!</h3>
+{% endif %}
+{% endblock %}
+
+{% block button %}
+{% if orders %}
+<form method="POST" class="mx-5 my-2">
+    {% csrf_token %}
+    {% load crispy_forms_tags %}
+    {{ form|crispy }}
+    <button class="btn btn-primary" type="submit">Cash Out!</button>
+</form>
+{% endif %}
+{% endblock %}

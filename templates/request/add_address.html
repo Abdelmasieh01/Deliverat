@@ -1,0 +1,22 @@
+<title>Add Address to your account</title>
+{% extends "base.html" %} 
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+{%if not_valid %}
+<div class="alert alert-danger my-5">
+    <strong>Wrong Address Information!</strong> Please Check your address information.
+</div>
+{% endif %}
+<div class="container py-5">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.gov|as_crispy_field }}
+        {{ form.dis|as_crispy_field }}
+        {{ form.street|as_crispy_field }}
+        {{ form.mark|as_crispy_field }}
+        <button class="btn btn-primary my-2" type="sumbit">Submit address</button>
+    </form>
+</div>
+{% endblock %}

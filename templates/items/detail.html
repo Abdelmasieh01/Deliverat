@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title%}
+<title>{{ item.name }}</title>
+{% endblock %}
+
+<!--This contains the item details-->
+{% block content %}
+<div class="container py-10">
+    <div class="row">
+        <div class="col-7">
+            <div class="row justify-content-start">
+                <img src="/media/{{ item.img }}" alt="{{item.des}}" width="350px" height="350px" style="border-radius: 13%; margin-bottom:5px;
+                    margin-top: 10px;">
+            </div>
+            <div class="row justify-content-start" style="text-align:center">
+                <h5>{{ item.name }}</h5>
+            </div>
+            <div class="row justify-content-start">
+                <h5>Price: {{ item.price }} L.E.</h5>
+            </div>
+            <div class="row justify-content-start">
+                <p>{{ item.des }}</p>
+            </div>
+
+            {% if item.stock %}
+            <div class="row justify-content-start">
+                <p style="color:green">Available: {{ item.stock }} in stock!</p>
+            </div>
+            {% else %}
+            <div class="row justify-content-start">
+                <p style="color:red">Available: {{ item.stock }} in stock!</p>
+            </div>
+            {% endif %}
+
+            <div class="row justify-content-start">
+                <p>Merchant: <a href="{% url 'items:profile' item.user.id %}">{{ item.user.username.capitalize }}</p></a>
+            </div>
+        </div>
+
+        <!--This section is shown only if user is logged in
+            This completes the form, with user and item info the already known,
+            that need just the quantity attribute-->
+        <div class="col-5 align-self-end">
+            {% if user.is_authenticated %}
+            <form method="POST">
+                {% csrf_token %}
+                {% load crispy_forms_tags %}
+                {{ form|crispy }}
+                <button class="btn btn-primary" type="submit">Add to Cart</button>
+            </form>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

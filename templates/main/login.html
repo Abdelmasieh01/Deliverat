@@ -1,0 +1,29 @@
+<title>Login | Deliverat</title>
+
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block nav %}
+{% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/">Welcome, {{ user.username.capitalize }}</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="/register">Register</a>
+            {% endif %}
+{% endblock %}
+
+{% block content %}
+<div id="login" class="container py-5">
+    <form method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-primary" type="submit">Login</button>
+    </form>
+    <p>Don't have an accout? <a href="/register">Create an account</a>.</p>
+</div>
+{% endblock %}

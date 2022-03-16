@@ -1,0 +1,23 @@
+<title>Add Item</title>
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<!--If for any reason the form is invalid, display a message-->
+{%if not_valid %}
+<div class="alert alert-danger my-2">
+    <strong>Wrong Item Information!</strong> Please Check your item details.
+</div>
+{% endif %}
+<div class="container py-2">
+    <form enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        {{ form.name|as_crispy_field }}
+        {{ form.price|as_crispy_field }}
+        {{ form.des|as_crispy_field }}
+        {{ form.stock|as_crispy_field }}
+        {{ form.img|as_crispy_field }}
+        <button class="btn btn-primary my-2" type="sumbit">Submit item</button>
+    </form>
+</div>
+{% endblock %}
